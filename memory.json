@@ -1,0 +1,21 @@
+{
+  "preferences": [
+    "Italian food and pizza",
+    "sci-fi movies",
+    "quiet places",
+    "classical music while working",
+    "night work",
+    "learning new programming languages"
+  ],
+  "emotional_pattrens": [
+    "love",
+    "stress",
+    "excited",
+    "terrible"
+  ],
+  "facts": [
+    "I usually wake up at 6 AM every day.",
+    "I live in New York and work as a software engineer.",
+    "I am allergic to peanuts and always avoid them."
+  ]
+}
