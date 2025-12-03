@@ -12,13 +12,24 @@
         "love",
         "stressed",
         "excitement",
-        "enjoyment"
+        "enjoyment",
+        "excited",
+        "joy",
+        "interest",
+        "positive",
+        "curious"
     ],
     "facts": [
         "Wakes up at 6 AM every day.",
         "Lives in New York.",
         "Works as a software engineer.",
         "Allergic to peanuts and always avoids them.",
-        "The user is stressed about exams"
+        "The user is stressed about exams",
+        "I feel excited when learning new programming languages.",
+        "i like chocolate",
+        "i like cooking",
+        "i like peanuts below",
+        "You enjoy tasty, protein-rich foods.",
+        "You love cooking."
     ]
 }

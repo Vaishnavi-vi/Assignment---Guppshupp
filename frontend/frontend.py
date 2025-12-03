@@ -1,12 +1,17 @@
 import sys
 import os
-from PIL import Image
-import json
+import json 
 import streamlit as st
+from PIL import Image
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "src")))
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+if ROOT_DIR not in sys.path:
+    sys.path.insert(0, ROOT_DIR)
+
+
 from src.Personality.Workflow.pipeline import workflow
 from src.state import PersonalityState
+
 
 
 def load_json_file(uploaded_file):
