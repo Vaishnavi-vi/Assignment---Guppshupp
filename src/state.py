@@ -8,10 +8,14 @@ class MemoryState(TypedDict):
     preferences:List[str]
     emotional_pattrens:List[str]
     facts:List[str]
+    memory:Dict[str,Any]
 
 class PersonalityState(TypedDict):
     messages:Annotated[List[BaseMessage],add_messages]   
-    memory: Dict[str,Any]     
+    memory: Dict[str,Any]  
+    preference_extracted:List[str]  
+    facts_extracted:List[str]
+    emotions_extracted:List[str]
     tone:str                                                 
     base_response: str                    
     final_response: str      

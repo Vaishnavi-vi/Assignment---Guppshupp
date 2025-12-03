@@ -20,7 +20,7 @@ def apply_personality(state: PersonalityState):
     }
 
     # FIX 1: Get actual tone
-    instr = tone_instructions.get(tone, "")
+    instr = tone_instructions.get(tone, "Rewrite this reply in a friendly, neutral tone.")
 
     prompt = PromptTemplate(
         template="""You are a personality transformer.User memory:{memory},Base reply: {base},Task: {instr}, Rules:

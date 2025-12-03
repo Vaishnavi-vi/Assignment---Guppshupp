@@ -1,24 +1,24 @@
 {
   "preferences": [
-    "Italian food",
-    "pizza",
-    "wake up at 6 AM",
-    "watch sci-fi movies",
+    "Italian food and pizza",
+    "watching sci-fi movies",
     "quiet places",
-    "listen to classical music",
-    "work at night",
-    "learn new programming languages"
+    "classical music while working",
+    "working at night",
+    "avoiding peanuts",
+    "learning new programming languages"
   ],
   "emotional_pattrens": [
     "love",
     "stress",
-    "enjoyment",
     "excitement",
+    "enjoyment",
     "calm"
   ],
   "facts": [
     "I usually wake up at 6 AM every day.",
     "I live in New York and work as a software engineer.",
-    "I am allergic to peanuts"
+    "I prefer working at night instead of mornings.",
+    "I am allergic to peanuts and always avoid them."
   ]
 }

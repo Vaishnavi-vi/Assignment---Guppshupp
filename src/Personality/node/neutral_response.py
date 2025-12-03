@@ -5,7 +5,7 @@ from src.Personality.llm.llm import model
 
 
 def generate_neutral_response(state:PersonalityState):
-    
+    """Generate a neutral, plain response before applying personality tone."""
     message=state["messages"][-1].content
     
     prompt=PromptTemplate(template="""You are a helpful assistant. Given the user's message below, produce a concise helpful reply in 2-3 lines.

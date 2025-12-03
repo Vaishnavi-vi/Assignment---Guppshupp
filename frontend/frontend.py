@@ -1,40 +1,102 @@
 import sys
 import os
 from PIL import Image
-
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-
+import json
 import streamlit as st
-from src.Memory.Workflow.pipeline import workflow1
-from src.Personality.Workflow.pipeline import workflow2
 
-st.set_page_config("Assignment===Guppsgupp", layout="centered")
-page=st.sidebar.radio("Navigation:",["Home","Assignment"])
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "src")))
+from src.Personality.Workflow.pipeline import workflow
+from src.state import PersonalityState
 
-if page=="Home":
+
+def load_json_file(uploaded_file):
+    try:
+        return json.load(uploaded_file)
+    except:
+        st.error("Invalid JSON format in uploaded file.")
+        return None
+
+
+st.set_page_config("GuppShupp AI – Memory & Personality Engine", layout="wide")
+page = st.sidebar.radio("Navigation:", ["Home", "Assignment"])
+
+if "messages" not in st.session_state:
+    st.session_state["messages"] = []
+if "preload" not in st.session_state:
+    st.session_state["preload"] = False
+if "last_node" not in st.session_state:
+    st.session_state["last_node"] = None
+if "memory" not in st.session_state:
+    st.session_state["memory"] = {
+        "preferences": [],
+        "emotional_patterns": [],
+        "facts": []
+    }
+
+if "user_input" not in st.session_state:
+    st.session_state["user_input"] = ""
+
+
+if page == "Home":
     st.header("💬 GuppShupp")
     image = Image.open("C:\\Users\\Dell\\Downloads\\Rag chatbot.png")
-    st.image(image,use_container_width=True)
-    st.write(""" Conversational Chatbot:\n
-             1. Understands user context over time.\n
-             2. Remembers important details.\n
-             3. Updates memories when the user changes their mind.\n
-             4. Responds in any chosen personality style\n
-             5. Produces JSON memory suitable for storage or analysis.\n""")
+    st.image(image, use_container_width=True)
+    st.write("""
+    Conversational Chatbot:\n
+    1. Understands user context over time.\n
+    2. Remembers important details.\n
+    3. Updates memories when the user changes their mind.\n
+    4. Responds in any chosen personality style.\n
+    5. Produces JSON memory suitable for storage or analysis.
+    """)
     st.sidebar.markdown("---")
     st.sidebar.subheader("About App")
-    st.sidebar.info("This project is an AI conversational agent that extracts user preferences, facts, and emotional patterns from messages, updating its memory dynamically. It generates responses in a chosen personality or tone, making interactions more personalized and human-like. The system outputs structured JSON memory for analysis or storage")
-    
+    st.sidebar.info(
+        "This project is an AI conversational agent that extracts user preferences, facts, "
+        "and emotional patterns from messages, updating its memory dynamically. "
+        "It generates responses in a chosen personality or tone, making interactions more personalized and human-like. "
+        "The system outputs structured JSON memory for analysis or storage."
+    )
     st.sidebar.markdown("---")
     st.sidebar.write("*Created by Vaishnavi Barolia*")
-    
+
 
 elif page == "Assignment":
-    st.header("📝 Assignment Chatbot")
+    st.header("📝 Guppshupp Chatbot")
 
-    # ---------------- INITIAL MESSAGES ----------------
-    if "messages" not in st.session_state:
-        st.session_state.messages = [
+
+    st.sidebar.markdown("---")
+    st.sidebar.header("Chatbot Settings:")
+    st.sidebar.subheader("Tone")
+    tone = st.sidebar.selectbox(
+        "Select Personality Tone:",
+        [None, "calm_mentor", "witty_friend", "therapist", "concise_professional"]
+    )
+
+    st.sidebar.subheader("Input Type:")
+    run_node = st.sidebar.radio(
+        "Test Input Type",
+        ["User Predefined Test Messages","Manual Input", "Upload JSON Messages"]
+    )
+
+    # Reset messages if mode changed
+    if st.session_state["last_node"] != run_node:
+        st.session_state["messages"] = []
+        st.session_state["preload"] = False
+        st.session_state["last_node"] = run_node
+
+
+    if run_node == "Manual Input":
+        user_msg = st.text_area("Start a new conversation, Enter Your test message here:")
+        if st.button("Run"):
+            if user_msg.strip():
+                st.session_state["messages"].append({"role": "user", "content": user_msg})
+            else:
+                st.warning("Please enter a message!")
+
+    elif run_node == "User Predefined Test Messages" and not st.session_state["preload"]:
+        st.info("Using example test messages:")
+        predefined_list = [
             {"role": "user", "content": "I love eating Italian food and pizza."},
             {"role": "user", "content": "I usually wake up at 6 AM every day."},
             {"role": "user", "content": "I feel stressed whenever deadlines approach."},
@@ -45,55 +107,83 @@ elif page == "Assignment":
             {"role": "user", "content": "I prefer working at night instead of mornings."},
             {"role": "user", "content": "I am allergic to peanuts and always avoid them."},
             {"role": "user", "content": "I feel excited when learning new programming languages."}
-            # ... add up to 30
         ]
+        st.code(json.dumps(predefined_list, indent=2), language="json")
+        st.session_state["messages"]=(predefined_list)
+        st.session_state["preload"] = True
 
-    # ---------------- MEMORY ----------------
-    if "memory" not in st.session_state:
-        output_memory = workflow1.invoke({
-            "messages": st.session_state.messages,
-            "memory": {}
+    elif run_node == "Upload JSON Messages":
+        uploaded = st.file_uploader("Upload JSON file (list of messages)")
+        if uploaded:
+            upload_messages = load_json_file(uploaded)
+            if upload_messages and isinstance(upload_messages, list):
+                st.session_state["messages"]=(upload_messages)
+
+
+    st.session_state["user_input"] = st.text_input(
+        "Type your message here:",
+        st.session_state["user_input"]
+    )
+
+    if st.button("Send") and st.session_state["user_input"].strip():
+        st.session_state["messages"].append({
+            "role": "user",
+            "content": st.session_state["user_input"]
         })
-        st.session_state.memory = output_memory.get("memory", {})
+        st.session_state["user_input"] = ""  
 
-    st.subheader("Current Memory")
-    st.json(st.session_state.memory)
+  
+    if st.session_state["messages"]:
+        input_state: PersonalityState = {
+            "messages": st.session_state["messages"],
+            "tone": tone,
+            "memory": st.session_state["memory"],
+            "base_response": "",
+            "final_response": ""
+        }
 
-    # ---------------- USER INPUT ----------------
-    user_input = st.text_input("Type your message:")
-    tone = st.selectbox("Select a tone for your response:", ["Calm_mentor", "Witty_friend", "Therapist", "None"])
-
-    if st.button("Send") and user_input:
-        # Add user message to history
-        st.session_state.messages.append({"role": "user", "content": user_input})
+        with st.spinner("Thinking..."):
+            result = workflow.invoke(input_state)
 
         # Update memory
-        st.session_state.memory = workflow1.invoke({
-            "messages": st.session_state.messages,
-            "memory": st.session_state.memory
-        }).get("memory", {})
+        st.session_state["memory"] = result.get("memory", st.session_state["memory"])
 
-        # Generate personality response
-        output2 = workflow2.invoke({
-            "messages": st.session_state.messages,
-            "memory": st.session_state.memory,
-            "tone": tone
-        })
+        base_resp = result.get("base_response", "")
+        final_resp = result.get("final_response", "")
 
-        base_response = output2.get("base_response", "")
-        final_response = output2.get("final_response", "")
+        assistant_reply = final_resp
+        if assistant_reply:
+            st.session_state["messages"].append({
+                "role": "assistant",
+                "content": assistant_reply
+            })
 
-        # Add bot response to chat history
-        st.session_state.messages.append({"role": "assistant", "content": final_response})
 
-    # ---------------- DISPLAY CHAT ----------------
-    st.subheader("Chat History")
-    for msg in st.session_state.messages:
-        if msg["role"] == "user":
-            st.markdown(f"**You:** {msg['content']}")
-        else:
-            st.markdown(f"**Bot:** {msg['content']}")
+        st.subheader("Conversation")
+        for msg in st.session_state["messages"]:
+            if msg["role"] == "user":
+                st.markdown(f"**You:** {msg['content']}")
+            else:
+                st.markdown(f"**AI:** {msg['content']}")
 
-    # Optional: show memory
-    st.subheader("Updated Memory")
-    st.json(st.session_state.memory)
+
+        if base_resp or final_resp:
+            st.markdown("---")
+            st.subheader("📝 Latest Message Responses")
+            col1, col2 = st.columns(2)
+            with col1:
+                st.markdown("**Before Personality (Neutral):**")
+                st.info(base_resp)
+            with col2:
+                st.markdown("**After Personality (With Tone):**")
+                st.success(final_resp)
+
+        # Display memory in sidebar
+    st.sidebar.subheader("Current Memory")
+    st.sidebar.json(st.session_state["memory"])
+
+
+                
+                
+
+

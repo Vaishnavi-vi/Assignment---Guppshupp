@@ -1,5 +1,5 @@
 from src.Memory.Workflow.pipeline import workflow1
-from src.Personality.Workflow.pipeline import workflow2
+from src.Personality.Workflow.pipeline import workflow
 import os
 from dotenv import load_dotenv
 from langchain_core.messages import HumanMessage
@@ -25,7 +25,7 @@ if __name__=="__main__":
     initial_state2={"messages":HumanMessage(content="I am so stressed about exams"),"tone":"calm_mentor"}
     
     try:
-        output=workflow2.invoke(initial_state2)
+        output=workflow.invoke(initial_state2)
         print("===Base-Message===")
         print(output["base_response"])
         print()

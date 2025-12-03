@@ -15,4 +15,4 @@ def save_memory(state:MemoryState):
     with open("memory.json", "w") as f:
         json.dump(memory_data, f, indent=2)
 
-    return state
+    return {"memory":memory_data}

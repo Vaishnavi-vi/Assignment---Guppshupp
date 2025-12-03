@@ -12,6 +12,10 @@ def load_memory_file() -> Dict[str, Any]:
             return json.load(f)
         except Exception:
             return {"preferences": {},"facts": {},"emotional_patterns": {}}
+        
+def save_memory_file(memory: Dict[str, Any]):
+    with open(MEMORY_FILE, "w") as f:
+        json.dump(memory, f, indent=4)
 
 def retriever_memory(state:PersonalityState):
     memory=load_memory_file()
