@@ -1,23 +1,14 @@
 {
     "preferences": [
         "Italian food and pizza",
-        "wakes up at 6 AM",
-        "enjoys sci\u2011fi movies",
-        "introverted and likes quiet places",
-        "listens to classical music while working",
-        "prefers working at night",
-        "excited when learning new programming languages"
+        "wakes up at 6 AM"
     ],
     "emotional_patterns": [
         "love",
         "stressed",
         "excitement",
         "enjoyment",
-        "excited",
-        "joy",
-        "interest",
-        "positive",
-        "curious"
+        "excited"
     ],
     "facts": [
         "Wakes up at 6 AM every day.",
@@ -25,11 +16,6 @@
         "Works as a software engineer.",
         "Allergic to peanuts and always avoids them.",
         "The user is stressed about exams",
-        "I feel excited when learning new programming languages.",
-        "i like chocolate",
-        "i like cooking",
-        "i like peanuts below",
-        "You enjoy tasty, protein-rich foods.",
-        "You love cooking."
+        "I feel excited when learning new programming languages."
     ]
 }
