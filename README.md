@@ -1,4 +1,6 @@
-<img width="401" height="25" alt="image" src="https://github.com/user-attachments/assets/a558c2a7-b21c-482a-ab31-3d9dc60ac2be" /># 💬 GuppShupp - AI Conversational Chatbot
+<img width="401" height="25" alt="image" src="https://github.com/user-attachments/assets/a558c2a7-b21c-482a-ab31-3d9dc60ac2be" />
+
+💬 GuppShupp - AI Conversational Chatbot
 
 **Author:** Vaishnavi Barolia
 
