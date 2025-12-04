@@ -1,3 +1,5 @@
+“The project runs locally using Streamlit.
+Instructions are provided in README.”
 
 💬 GuppShupp - AI Conversational Chatbot
 
